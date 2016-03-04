@@ -15,6 +15,9 @@ if [[ -z "${PROCFILE}" ]]; then
     exit 1
 fi
 
+echo "BUILD_DIR IS: ${BUILD_DIR}" | indent
+echo "PROCFILE IS: ${PROCFILE}" | indent
+
 cp ${BUILD_DIR}/_procfiles/${PROCFILE} ${BUILD_DIR}
 
 echo "Copied ${PROCFILE} as Procfile successfully" | indent
