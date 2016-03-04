@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+echo "Multi-procfile"
+exit 0
