@@ -15,6 +15,6 @@ if [[ -z "${PROCFILE}" ]]; then
     exit 1
 fi
 
-cp _procfiles/${PROCFILE} $BUILD_DIR
+cp ${BUILD_DIR}/_procfiles/${PROCFILE} ${BUILD_DIR}
 
-echo "Copied Confluent ${$PROCFILE} as Procfile successfully" | indent
+echo "Copied ${PROCFILE} as Procfile successfully" | indent
