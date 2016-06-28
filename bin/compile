@@ -8,12 +8,10 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
-APP_BAE=$(cat ${APP_BASE}/PROCFILE)
-
-if [[ -z "${APP_BASE}" ]]; then
+if [ ! -f ${ENV_DIR}/APP_BASE ]; then
     echo "APP_BASE was not set. Aborting" | indent
-    exit 1
 fi
+APP_BASE=$(cat ${ENV_DIR}/APP_BASE)
 
 (
     stage=`mktemp -d` &&
