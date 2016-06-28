@@ -8,18 +8,25 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
-PROCFILE=$(cat ${ENV_DIR}/PROCFILE)
+APP_BAE=$(cat ${APP_BASE}/PROCFILE)
 
-if [[ -z "${PROCFILE}" ]]; then
-    echo "PROCFILE was not set. Aborting" | indent
+if [[ -z "${APP_BASE}" ]]; then
+    echo "APP_BASE was not set. Aborting" | indent
     exit 1
 fi
 
-cp ${BUILD_DIR}/${PROCFILE} ${BUILD_DIR}/Procfile
+(
+    stage=`mktemp -d` &&
+    mv ${BUILD_DIR}/${APP_BASE} ${stage} &&
+    shopt -s dotglob nullglob &&
+    rm -rf ${BUILD_DIR}/* &&
+    mv ${stage}/${APP_BASE}/* ${BUILD_DIR}
+)
 
 if ! [ $? ]; then
     echo "FAILED to copy a Procfile" | indent
     exit 1
 fi
 
-echo "Copied ${PROCFILE} as Procfile successfully" | indent
+echo "Copied ${APP_BASE} to root of app successfully" | indent
+
