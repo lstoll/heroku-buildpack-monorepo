@@ -1,28 +1,27 @@
 #!/usr/bin/env bash
-
 indent() {
     sed -u 's/^/      /'
 }
 
-BUILD_DIR=$1
-CACHE_DIR=$2
-ENV_DIR=$3
+BUILD_DIR="$1"
+CACHE_DIR="$2"
+ENV_DIR="$3"
+STAGE="$(mktemp -d)"
 
-if [ ! -f ${ENV_DIR}/APP_BASE ]; then
+if [ ! -f "${ENV_DIR}/APP_BASE" ]; then
     echo "APP_BASE was not set. Aborting" | indent
+    exit 1
 fi
-APP_BASE=$(cat ${ENV_DIR}/APP_BASE)
+APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
 
 (
-    stage=`mktemp -d` &&
-    mv ${BUILD_DIR}/${APP_BASE} ${stage} &&
-    shopt -s dotglob nullglob &&
-    rm -rf ${BUILD_DIR}/* &&
-    mv ${stage}/${APP_BASE}/* ${BUILD_DIR}
+    mv "${BUILD_DIR}/${APP_BASE}" "${STAGE}" &&
+    rm -rf "${BUILD_DIR}" &&
+    mv "${STAGE}/$(basename "$APP_BASE")" "${BUILD_DIR}"
 )
 
-if ! [ $? ]; then
-    echo "FAILED to copy a Procfile" | indent
+if [ $? -ne 0 ]; then
+    echo "FAILED to copy directory into place" | indent
     exit 1
 fi
 
