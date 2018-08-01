@@ -22,6 +22,10 @@ if [ $? -ne 0 ]; then
     echo "FAILED to copy directory into place" | indent
     exit 1
 fi
+echo "GEN"
+cat ${BUILD_DIR}/requirements.txt
+echo "REF"
+cat "${BUILD_DIR}/${APP_BASE}/requirements.txt"
 
 echo "Created new requirements.txt and copied procfile successfully!" | indent
 
