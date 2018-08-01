@@ -13,12 +13,9 @@ if [ ! -f "${ENV_DIR}/APP_BASE" ]; then
     exit 1
 fi
 APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
-
 (
-    mv "${BUILD_DIR}/${APP_BASE}" "${STAGE}" &&
-    mv "${BUILD_DIR}" "${STAGE}/$(basename "$APP_BASE")/repo" &&
-    rm -rf "${BUILD_DIR}" &&
-    mv "${STAGE}/$(basename "$APP_BASE")" "${BUILD_DIR}"
+    cp "${BUILD_DIR}/${APP_BASE}/Procfile" "${BUILD_DIR}/Procfile" &&
+    echo "-r ${BUILD_DIR}/${APP_BASE}/requirements.txt" > "${BUILD_DIR}/requirements.txt"
 )
 
 if [ $? -ne 0 ]; then
@@ -26,5 +23,5 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo "Copied ${APP_BASE} to root of app successfully" | indent
+echo "Created new requirements.txt and copied procfile successfully!" | indent
 
