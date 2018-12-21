@@ -6,6 +6,35 @@ In any case, how do you manage this on Heroku? You don't. Heroku applications as
 
 Enter the Monorepo buildpack, which is a copy of [heroku-buildpack-multi-procfile](https://github.com/heroku/heroku-buildpack-multi-procfile) except it moves the target path in to the root, rather than just the Procfile. This helps for ruby apps etc.
 
+This buildpack was extended by [Bus.com](https://www.bus.com/) to add support for shared gems. The expected repository layout is:
+
+
+```
+.
++- app1
+|   |
+|   + Gemfile
+|   + Gemfile.lock
+|   + Procfile
+|
++- app2
+|   |
+|   + Gemfile
+|   + Gemfile.lock
+|   + Procfile
+|
++- shared
+    |
+    + gems
+       |
+       +- common
+           |
+           +- common.gemspec
+           +- Gemfile
+```
+
+During the compile phase, APP_BASE is moved to /app, and shared/gems is moved within /app. Gemfile and Gemfile.lock are modified to move the shared/gems directory around, in case this app references the shared gems.
+
 # Usage
 
 1. Write a bunch of ~~Procfiles~~ apps and scatter them through out your code base.
