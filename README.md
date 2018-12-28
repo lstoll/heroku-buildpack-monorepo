@@ -14,6 +14,8 @@ Enter the Monorepo buildpack, which is a copy of [heroku-buildpack-multi-procfil
    `heroku buildpacks:add -a <app> https://github.com/lstoll/heroku-buildpack-monorepo`
 4. For each app, `git push git@heroku.com:<app> master`
 
+Note: If you already have other buildpacks defined, you'll need to make sure that the heroku-buildpack-monorepo buildpack is defined first. You can do this by adding `-i 1` to the `heroku buildpacks:add` command.
+
 # Authors
 
 Andrew Gwozdziewycz <apg@heroku.com> and Cyril David <cyx@heroku.com> and now Lincoln Stoll <lstoll@heroku.com>
