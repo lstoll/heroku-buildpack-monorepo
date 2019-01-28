@@ -33,7 +33,6 @@ APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
 (
     copy "${BUILD_DIR}/${APP_BASE}/Procfile" "${BUILD_DIR}/Procfile" &&
     copy "${BUILD_DIR}/${APP_BASE}/.requirements-for-heroku.txt" "${BUILD_DIR}/requirements.txt" &&
-    copy_if_exists "${BUILD_DIR}/${APP_BASE}/manage.py" "${BUILD_DIR}/manage.py" &&
     copy_if_exists "${BUILD_DIR}/${APP_BASE}/Aptfile" "${BUILD_DIR}/Aptfile"
 )
 
