@@ -3,11 +3,18 @@ indent() {
     sed -u 's/^/      /'
 }
 
-cp_if_exists() {
+copy() {
+    echo "Copying $1 -> $2" | indent
+    cp "$1" "$2"
+    return $?
+}
+
+copy_if_exists() {
     if [ -e "$1" ]; then
-        cp "$1" "$2"
+        copy "$1" "$2"
         return $?
     fi
+    echo "$1 does not exist; skipping copy" | indent
     return 0
 }
 
@@ -20,22 +27,20 @@ if [ ! -f "${ENV_DIR}/APP_BASE" ]; then
     echo "APP_BASE was not set. Aborting" | indent
     exit 1
 fi
+
+echo "------> APP_BASE is set. Copying files..."
 APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
 (
-    cp "${BUILD_DIR}/${APP_BASE}/Procfile" "${BUILD_DIR}/Procfile" &&
-    cp "${BUILD_DIR}/${APP_BASE}/.requirements-for-heroku.txt" "${BUILD_DIR}/requirements.txt" &&
-    cp_if_exists "${BUILD_DIR}/${APP_BASE}/manage.py" "${BUILD_DIR}/manage.py" &&
-    cp_if_exists "${BUILD_DIR}/${APP_BASE}/Aptfile" "${BUILD_DIR}/Aptfile"
+    copy "${BUILD_DIR}/${APP_BASE}/Procfile" "${BUILD_DIR}/Procfile" &&
+    copy "${BUILD_DIR}/${APP_BASE}/.requirements-for-heroku.txt" "${BUILD_DIR}/requirements.txt" &&
+    copy_if_exists "${BUILD_DIR}/${APP_BASE}/manage.py" "${BUILD_DIR}/manage.py" &&
+    copy_if_exists "${BUILD_DIR}/${APP_BASE}/Aptfile" "${BUILD_DIR}/Aptfile"
 )
 
 if [ $? -ne 0 ]; then
-    echo "FAILED to copy directory into place" | indent
+    echo "FAILED to copy files into place" | indent
     exit 1
 fi
-echo "GEN"
-cat "${BUILD_DIR}/requirements.txt"
-echo "REF"
-cat "${BUILD_DIR}/${APP_BASE}/requirements.txt"
 
-echo "Created new requirements.txt and copied procfile successfully!" | indent
+echo "All files copied successfully!" | indent
 
