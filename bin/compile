@@ -28,7 +28,7 @@ if [ ! -f "${ENV_DIR}/APP_BASE" ]; then
     exit 1
 fi
 
-echo "------> APP_BASE is set. Copying files..."
+echo "-----> APP_BASE is set to ${APP_BASE}. Copying files..."
 APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
 (
     copy "${BUILD_DIR}/${APP_BASE}/Procfile" "${BUILD_DIR}/Procfile" &&
