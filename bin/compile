@@ -3,6 +3,14 @@ indent() {
     sed -u 's/^/      /'
 }
 
+cp_if_exists() {
+    if [ -e "$1" ]; then
+        cp "$1" "$2"
+        return $?
+    fi
+    return 0
+}
+
 BUILD_DIR="$1"
 CACHE_DIR="$2"
 ENV_DIR="$3"
@@ -15,7 +23,9 @@ fi
 APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
 (
     cp "${BUILD_DIR}/${APP_BASE}/Procfile" "${BUILD_DIR}/Procfile" &&
-    echo "-r ${BUILD_DIR}/${APP_BASE}/requirements.txt" > "${BUILD_DIR}/requirements.txt"
+    cp "${BUILD_DIR}/${APP_BASE}/.requirements-for-heroku.txt" "${BUILD_DIR}/requirements.txt" &&
+    cp_if_exists "${BUILD_DIR}/${APP_BASE}/manage.py" "${BUILD_DIR}/manage.py" &&
+    cp_if_exists "${BUILD_DIR}/${APP_BASE}/Aptfile" "${BUILD_DIR}/Aptfile"
 )
 
 if [ $? -ne 0 ]; then
@@ -23,7 +33,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 echo "GEN"
-cat ${BUILD_DIR}/requirements.txt
+cat "${BUILD_DIR}/requirements.txt"
 echo "REF"
 cat "${BUILD_DIR}/${APP_BASE}/requirements.txt"
 
