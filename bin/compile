@@ -3,6 +3,21 @@ indent() {
     sed -u 's/^/      /'
 }
 
+copy() {
+    echo "Copying $1 -> $2" | indent
+    cp "$1" "$2"
+    return $?
+}
+
+copy_if_exists() {
+    if [ -e "$1" ]; then
+        copy "$1" "$2"
+        return $?
+    fi
+    echo "$1 does not exist; skipping copy" | indent
+    return 0
+}
+
 BUILD_DIR="$1"
 CACHE_DIR="$2"
 ENV_DIR="$3"
@@ -12,20 +27,19 @@ if [ ! -f "${ENV_DIR}/APP_BASE" ]; then
     echo "APP_BASE was not set. Aborting" | indent
     exit 1
 fi
+
+echo "-----> APP_BASE is set to ${APP_BASE}. Copying files..."
 APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
 (
-    cp "${BUILD_DIR}/${APP_BASE}/Procfile" "${BUILD_DIR}/Procfile" &&
-    echo "-r ${BUILD_DIR}/${APP_BASE}/requirements.txt" > "${BUILD_DIR}/requirements.txt"
+    copy "${BUILD_DIR}/${APP_BASE}/Procfile" "${BUILD_DIR}/Procfile" &&
+    copy "${BUILD_DIR}/${APP_BASE}/.requirements-for-heroku.txt" "${BUILD_DIR}/requirements.txt" &&
+    copy_if_exists "${BUILD_DIR}/${APP_BASE}/Aptfile" "${BUILD_DIR}/Aptfile"
 )
 
 if [ $? -ne 0 ]; then
-    echo "FAILED to copy directory into place" | indent
+    echo "FAILED to copy files into place" | indent
     exit 1
 fi
-echo "GEN"
-cat ${BUILD_DIR}/requirements.txt
-echo "REF"
-cat "${BUILD_DIR}/${APP_BASE}/requirements.txt"
 
-echo "Created new requirements.txt and copied procfile successfully!" | indent
+echo "All files copied successfully!" | indent
 
