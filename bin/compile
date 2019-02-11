@@ -33,7 +33,9 @@ APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
 (
     copy "${BUILD_DIR}/${APP_BASE}/Procfile" "${BUILD_DIR}/Procfile" &&
     copy "${BUILD_DIR}/${APP_BASE}/.requirements-for-heroku.txt" "${BUILD_DIR}/requirements.txt" &&
-    copy_if_exists "${BUILD_DIR}/${APP_BASE}/Aptfile" "${BUILD_DIR}/Aptfile"
+    copy_if_exists "${BUILD_DIR}/${APP_BASE}/Aptfile" "${BUILD_DIR}/Aptfile" &&
+    copy_if_exists "${BUILD_DIR}/${APP_BASE}/app.json" "${BUILD_DIR}/app.json" &&
+    copy_if_exists "${BUILD_DIR}/${APP_BASE}/runtime.txt" "${BUILD_DIR}/runtime.txt"
 )
 
 if [ $? -ne 0 ]; then
