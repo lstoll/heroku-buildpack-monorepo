@@ -14,7 +14,16 @@ Enter the Monorepo buildpack, which is a copy of [heroku-buildpack-multi-procfil
    `heroku buildpacks:add -a <app> https://github.com/lstoll/heroku-buildpack-monorepo`
 4. For each app, `git push git@heroku.com:<app> master`
 
-Note: If you already have other buildpacks defined, you'll need to make sure that the heroku-buildpack-monorepo buildpack is defined first. You can do this by adding `-i 1` to the `heroku buildpacks:add` command.
+Note: If you already have other buildpacks defined, you'll need to make sure that the heroku-buildpack-monorepo buildpack is defined first. You can do this by adding `-i 1` to the `heroku buildpacks:add` command or changing the buildpack order visually in the application settings under "buildpacks" in the Heroku dashboard.
+
+## Local dependencies
+
+If you have local dependencies (e.g. a lerna monorepo with "file://../packagename" style dependencies pointing to packages contained in the same repo, exactly one level above your repository) you can add them using the DEPENDENCIES build var. E.g.
+
+1. `APP_BASE=packages/frontend`
+2. `DEPENDENCIES=packages/shared packages/util`
+
+would add `packages/shared` and `packages/util` to one level above the Heroku `BUILD_DIR` and make them available for the build process.
 
 # Authors
 
