@@ -18,4 +18,4 @@ Note: If you already have other buildpacks defined, you'll need to make sure tha
 
 # Authors
 
-Andrew Gwozdziewycz <apg@heroku.com> and Cyril David <cyx@heroku.com> and now Lincoln Stoll <lstoll@heroku.com>
+Andrew Gwozdziewycz <apg@heroku.com> and Cyril David <cyx@heroku.com> and now Lincoln Stoll <lstoll@heroku.com> and Jan Tietze <jan@tietze.io>
