@@ -29,7 +29,7 @@ fi
                 echo "Dependency ${DEPENDENCY} not found. Aborting" | indent
                 exit 1
             fi
-            echo "Copied dependency ${DEPENDENCY}."
+            echo "Lifting dependency ${DEPENDENCY} to ${BUILD_DIR}/${DEPENDENCY}." | indent | indent
             mv "${BUILD_DIR}/${DEPENDENCY}" "${BUILD_DIR}/../"
         done
     fi &&
