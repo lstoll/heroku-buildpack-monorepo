@@ -20,8 +20,6 @@ else
     DEPENDENCIES="$(cat "${ENV_DIR}/DEPENDENCIES")"
 fi
 
-APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
-
 (
     mv "${BUILD_DIR}/${APP_BASE}" "${STAGE}" &&
     if [ ! -z "$DEPENDENCIES" ]; then
