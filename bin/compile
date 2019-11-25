@@ -30,7 +30,7 @@ fi
                 exit 1
             fi
             echo "Lifting dependency ${DEPENDENCY} to ${BUILD_DIR}/${DEPENDENCY}." | indent | indent
-            mv "${BUILD_DIR}/${DEPENDENCY}" "${BUILD_DIR}/../"
+            mv "${BUILD_DIR}/${DEPENDENCY}" "${BUILD_DIR}/../$(basename "$DEPENDENCY)"
         done
     fi &&
     rm -rf "${BUILD_DIR}" &&
