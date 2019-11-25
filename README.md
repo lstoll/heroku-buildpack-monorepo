@@ -18,10 +18,10 @@ Note: If you already have other buildpacks defined, you'll need to make sure tha
 
 ## Local dependencies
 
-If you have local dependencies (e.g. a lerna monorepo with "file://../packagename" style dependencies pointing to packages contained in the same repo, exactly one level above your repository) you can add them using the DEPENDENCIES build var. E.g.
+If you have local dependencies (e.g. a lerna monorepo with `file:../packagename` style dependencies pointing to packages contained in the same repo, *exactly one level above your package*) you can add them using the DEPENDENCIES build var. E.g.
 
 1. `APP_BASE=packages/frontend`
-2. `DEPENDENCIES=packages/shared packages/util`
+2. `DEPENDENCIES=packages/shared packages/util` to include two packages, `packages/shared` and `packages/util`.
 
 would add `packages/shared` and `packages/util` to one level above the Heroku `BUILD_DIR` and make them available for the build process.
 
