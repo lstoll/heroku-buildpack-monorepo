@@ -1,3 +1,7 @@
+> This is a fork of an existing builpack. This buildpack has been forked to ensure that we can have better understanding and control over what the buildpack accesses, and what operations it performs, specifically around accessing the [environment directory](https://devcenter.heroku.com/articles/buildpack-api#bin-compile-summary). We decided to fork the buildpack rather than point at a specific sha to ensure that the buildpack is still available in the case of the target repository being removed.
+
+---
+
 # Heroku Multi Procfile buildpack
 
 Imagine you have a single code base, which has a few different applications within it... or at least the ability to run a few different applications. Or, maybe you're Google with your mono repo?
