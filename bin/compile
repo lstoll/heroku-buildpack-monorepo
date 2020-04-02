@@ -14,16 +14,33 @@ if [ ! -f "${ENV_DIR}/APP_BASE" ]; then
 fi
 APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
 
+if [ ! -f "${ENV_DIR}/DEPENDENCIES" ]; then
+    echo "No dependencies configured. If you wish to include local packages in monorepo with '../<package>' style depencies, set DEPENDENCIES." | indent
+else
+    DEPENDENCIES="$(cat "${ENV_DIR}/DEPENDENCIES")"
+fi
+
 (
     mv "${BUILD_DIR}/${APP_BASE}" "${STAGE}" &&
+    if [ ! -z "$DEPENDENCIES" ]; then
+        echo "Processing dependencies" | indent
+        for DEPENDENCY in ${DEPENDENCIES}; do
+            if [ ! -d "${BUILD_DIR}/${DEPENDENCY}" ]; then
+                echo "Dependency ${DEPENDENCY} not found. Aborting" | indent
+                exit 1
+            fi
+            TARGET="${BUILD_DIR}/../$(basename "$DEPENDENCY")"
+            echo "Lifting dependency ${DEPENDENCY} from '${BUILD_DIR}/${DEPENDENCY}' to '${TARGET}'." | indent | indent
+            mv -v "${BUILD_DIR}/${DEPENDENCY}" "${TARGET}"
+        done
+    fi &&
     rm -rf "${BUILD_DIR}" &&
     mv "${STAGE}/$(basename "$APP_BASE")" "${BUILD_DIR}"
 )
 
 if [ $? -ne 0 ]; then
-    echo "FAILED to copy directory into place" | indent
+    echo "FAILED to copy directories into place" | indent
     exit 1
 fi
 
 echo "Copied ${APP_BASE} to root of app successfully" | indent
-
