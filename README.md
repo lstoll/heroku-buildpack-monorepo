@@ -1,4 +1,4 @@
-# Heroku Multi Procfile buildpack
+# Heroku Monorepo Buildpack
 
 Imagine you have a single code base, which has a few different applications within it... or at least the ability to run a few different applications. Or, maybe you're Google with your mono repo?
 
