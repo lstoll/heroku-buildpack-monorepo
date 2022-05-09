@@ -18,8 +18,13 @@ if [ ! -f "${ENV_DIR}/APP_BASE" ]; then
 fi
 APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
 
+BUILD_PARENT_DIR=$(builtin cd "$BUILD_DIR/.."; pwd)
+APP_BASE_PARENT=$(builtin cd "${BUILD_DIR}/${APP_BASE}/.."; pwd)
+
 (
     mv "${BUILD_DIR}/${APP_BASE}" "${STAGE}" &&
+    ls $APP_BASE_PARENT &&
+    mv $APP_BASE_PARENT/* "${BUILD_PARENT_DIR}/" &&
     rm -rf "${BUILD_DIR}"/* &&
     mv "${STAGE}/$(basename "$APP_BASE")"/* "${BUILD_DIR}"
 )
