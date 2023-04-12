@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# Ensure wildcards in globs match dotfiles too.
-shopt -s dotglob
-
 indent() {
     sed -u 's/^/      /'
 }
@@ -12,17 +9,23 @@ CACHE_DIR="$2"
 ENV_DIR="$3"
 STAGE="$(mktemp -d)"
 
+if [ -f "${ENV_DIR}/MONOREPO_BUILDPACK_DEBUG" ]; then
+  set -x
+  env
+fi
+
 if [ ! -f "${ENV_DIR}/APP_BASE" ]; then
     echo "APP_BASE was not set. Aborting" | indent
     exit 1
 fi
 APP_BASE="$(cat "${ENV_DIR}/APP_BASE")"
 
-(
-    mv "${BUILD_DIR}/${APP_BASE}" "${STAGE}" &&
-    rm -rf "${BUILD_DIR}"/* &&
-    mv "${STAGE}/$(basename "$APP_BASE")"/* "${BUILD_DIR}"
-)
+mv "${BUILD_DIR}/${APP_BASE}" "${STAGE}"
+rm -rf "${BUILD_DIR}"/*
+# Ensure wildcards in globs match dotfiles too.
+# Do this after the rm, because during CI the indyno plans run before us and leave DB state in .xxx dirs
+shopt -s dotglob
+mv "${STAGE}/$(basename "$APP_BASE")"/* "${BUILD_DIR}"
 
 if [ $? -ne 0 ]; then
     echo "FAILED to copy directory into place" | indent
